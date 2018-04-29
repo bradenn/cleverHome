@@ -12,12 +12,18 @@ $housename = $personal->find( [ 'data' => 'info' ] );
 
 include "header.php";
 
+//IGNORE THIS FILE! THIS FILE DOES NOT WORK AND EVER WILL WORK!
+
+
 ?>
 
 
 
   <body>
 
+    
+    
+    
     <!-- Navigation -->
 
     <!-- Page Content -->
@@ -34,6 +40,7 @@ include "header.php";
 
 <div class="row">
         <?php
+  //File 'vendor/ring/init.py' was redacted from repositry due to wildly useless need. 
    $arrs = str_replace('u"', '"', str_replace("'", '"', exec("python vendor/ring/init.py")));
 
 $arr = json_decode($arrs);
