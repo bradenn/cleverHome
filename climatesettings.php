@@ -1,5 +1,5 @@
 <?php
-require("mongo.php");
+require('mongo.php');
 
 $collection = $client->cleverHome->climate;
 $result = $collection->find( [ 'data' => "measurments" ] );

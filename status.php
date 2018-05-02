@@ -1,4 +1,5 @@
 <?php
+
 require("mongo.php");
 
 $collection = $client->cleverHome->lights;
