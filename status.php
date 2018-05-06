@@ -6,7 +6,7 @@ $collection = $client->cleverHome->lights;
 
 $result = $collection->find( [ 'type' => 'device' ] );
 
-
+$arr = array();
 
 foreach ($result as $entry) {
   $results = exec('bash hs100.sh '.$entry["lanAddress"].' 9999 check');
@@ -24,12 +24,12 @@ foreach ($result as $entry) {
 [ '$set' => [ 'status' => 0 ]]
 );
     }
-
+array_push($arr, $entry);
 
 
 }
 
-
+echo json_encode($arr);
 
 
 

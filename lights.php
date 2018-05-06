@@ -1,90 +1,86 @@
 <?php
-require_once "status.php";
-require "mongo.php";
-require "weather.php";
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+include "mongo.php";
+
 $lights = $client->cleverHome->lights;
-$personal = $client->cleverHome->personal;
 
 $lightsquery = $lights->find( [ 'type' => 'device' ] );
-$housename = $personal->find( [ 'data' => 'info' ] );
 
-include "header.php";
 ?>
 
+<html>
+  <script src="vendor/jquery/jquery.js"></script>
+<script type="text/javascript">
 
 
-  <body>
+function updateUI(){
+  $.get( "check.php", function( data ) {
+  var array = JSON.parse(data);
+  for (var i = 0, len = array.length; i < len; i++) {
+    var nested = array[i];
+    console.log("Device: "+nested["_id"]["$oid"]+" Status: "+nested["status"])
+    if(nested["status"] == 1){
+      document.getElementById(nested["_id"]["$oid"]).checked = true;
+      document.getElementById(nested["_id"]["$oid"]).setAttribute('onclick','updateLights("off", "'+nested["lanAddress"]+'")');
+    }else if (nested["status"] == 0) {
+      document.getElementById(nested["_id"]["$oid"]).checked = false;
+      document.getElementById(nested["_id"]["$oid"]).setAttribute('onclick','updateLights("on", "'+nested["lanAddress"]+'")');
+    }
+  }
+  });
+}
+function init(){
+updateUI();
+}
+window.setInterval(function() {
+  $.get( "status.php", function( data ) {
+  var array = JSON.parse(data);
+  for (var i = 0, len = array.length; i < len; i++) {
+    var nested = array[i];
+    console.log("Device: "+nested["_id"]["$oid"]+" Status: "+nested["status"])
+    if(nested["status"] == 1){
+      document.getElementById(nested["_id"]["$oid"]).checked = true;
+      document.getElementById(nested["_id"]["$oid"]).setAttribute('onclick','updateLights("off", "'+nested["lanAddress"]+'")');
+    }else if (nested["status"] == 0) {
+      document.getElementById(nested["_id"]["$oid"]).checked = false;
+      document.getElementById(nested["_id"]["$oid"]).setAttribute('onclick','updateLights("on", "'+nested["lanAddress"]+'")');
+    }
+  }
+  });
+}, 5000);
 
-    <!-- Navigation -->
+function updateLights(toggle, device){
 
-    <!-- Page Content -->
-    <div class="container">
-        <div class="row">
+    $.get("lanlights.php", {address: device, dat: toggle});
 
-        <div class="col-lg-12">
-            <h1 ><a href="index.php" style="text-decoration: none; color:#dfe6e9;">Cleverhome:<span style="color:#0984e3;">lights</span></a></h1>
-            </div><div class="col-lg-3"></div></div><br>
+}
+</script>
 
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+<link rel="stylesheet" href="vendor/css/style.css">
+<body onload="init();">
 
+<br>
+<div class="ch-content">
+<h1>CLEVERHOME <span class="ch-text-secondary">HUB</span></h1>
+<br>
+<?php
+foreach ($lightsquery as $entry) {
+echo '<div class="ch-element-group"><div class="ch-element-inline">';
+echo '<h2 class="ch-element-primary">'.$entry["name"].'</h2><h2 class="ch-element-secondary">'.$entry["location"].'</h2>';
+echo '</div>';
+echo '  <div class="ch-element-inline-right">
+  <label class="switch">
+  <input type="checkbox" id="'.$entry["_id"].'">
+  <span class="slider round" style=""></span>
+</label>
+</div>';
+echo '</div><br>';
+}
+?>
 
-
-
-<div class="row">
-        <?php
-            foreach ($lightsquery as $entry) {
-                $border = "";
-                if($entry["status"] == 1){
-               $border = "border-color:#0984e3;";
-                }else if($entry["status"] == 0){
-                 $border = "";
-                }
-
-                echo '<div class="col-lg-6"><li class="list-group-item d-flex justify-content-between align-items-center" style="  background-color:#000; border-color:#2d3436; '.$border.'">';
-
-             if($entry["status"] == 1){
-            echo ' <h4 class=""  style="font-family: \'Abel\', sans-serif; color:#dfe6e9;">'.$entry["name"].':<span style="color:#0984e3;">on</span></h4><br>';
-                }
-              if($entry["status"] == 0){
-            echo ' <h4 class=""  style="font-family: \'Abel\', sans-serif; color:#dfe6e9;">'.$entry["name"].':<span style="color:#0984e3;">off</span></h4><br>';
-              }
-
-
-
-
-                if($entry["status"] == 1){
-                    echo '<label class="switch">
-  <input type="checkbox" style="padding-top:10px;" checked onclick="window.location.href=\'lanlights.php?address='.$entry["lanAddress"].'&&dat=off\'">
-  <span class="slider"></span>
-</label>';
-
-                }else if($entry["status"] == 0){
-                     echo '<label class="switch">
-  <input type="checkbox" style="padding-top:10px;" onclick="window.location.href=\'lanlights.php?address='.$entry["lanAddress"].'&&dat=on\'">
-  <span class="slider"></span>
-</label>';
-
-                }
-
-}   echo '</li></div>';
-            ?>
-     </li>
-      <div class="col-lg-6">
-
-
-  </div>
-
-          </div>
-        </div>
-
-
-
-
-
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  </body>
+</div>
+</body>
 
 </html>
