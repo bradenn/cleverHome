@@ -3,6 +3,7 @@ body{
   background-color:#202529;
   color:#A1B4C4;
 }
+
 a.ch-button-primary {
   font-family: 'Montserrat', sans-serif;
   margin-top: 20px;
@@ -23,14 +24,49 @@ span.ch-text-secondary{
   font-family: 'Montserrat', sans-serif;
 
 }
+div.ch-menu-group{
+padding-left: 25px;
+margin-right: 25px;
+margin-bottom: 25px;
+  border-width: 4px;
+  width:relative;
+
+  border-color: rgb(50, 56, 61);
+  border-style: solid;
+  border-radius: 10px;
+  background-color: rgb(32, 37, 41);
+  z-index: 8;
+
+}
+div.ch-menu-container{
+  padding-left: 25px;
+    border-width: 4px;
+    width:98%;
+    border-color: rgb(50, 56, 61);
+    border-style: solid;
+    border-radius: 10px;
+    background-color: rgb(32, 37, 41);
+    z-index: 8;
+}
+a.ch-menu-link{
+  color:#A1B4C4;
+  font-family: 'Montserrat', sans-serif;
+  text-decoration: none;
+  color:inherit;
+}
+h2.ch-menu-secondary{
+  color:#1BC6B4;
+  font-family: 'Montserrat', sans-serif;
+}
+
 div.ch-content{
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 div.ch-element-group {
   padding-left:25px;
   border-width: 4px;
-  width:60%;
+  width:94%;
   border-color: rgb(50, 56, 61);
   border-style: solid;
   border-radius: 10px;
@@ -53,10 +89,14 @@ h2.ch-element-primary{
   font-family: 'Montserrat', sans-serif;
 }
 h2.ch-element-secondary{
-  color:#4C555C;
+  color:#1BC6B4;
   font-family: 'Montserrat', sans-serif;
 }
-
+a.ch-header-link {
+  font-size: 52px;
+  text-decoration: none;
+  color:inherit;
+}
 /* w3 slider */
 
 .switch {

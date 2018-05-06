@@ -1,5 +1,4 @@
 <?php
-require_once "status.php";
 require "mongo.php";
 require "weather.php";
 $climate = $client->cleverHome->climate;
@@ -21,32 +20,32 @@ include "header.php";
     <!-- Page Content -->
     <div class="container">
         <div class="row">
-        
+
         <div class="col-lg-12">
             <h1 ><a href="index.php" style="text-decoration: none; color:#dfe6e9;">Cleverhome:<span style="color:#0984e3;">climate</span></a></h1>
             </div><div class="col-lg-3"></div></div><br>
-      
-      
-        
-            
-            
+
+
+
+
+
           <div class="row">
-            <?php 
+            <?php
         foreach ($climatequery as $entry) {
             echo '<div class="col-lg-5">';
             echo ' <h4 class=""  style="font-family: \'Abel\', sans-serif; color:#dfe6e9;">Temperature:<span style="color:#0984e3;">'.$entry["temp"].'°</span>&nbsp;&nbsp;<span class="">Humidity:<span class="" style="color:#0984e3;">'.$entry["humidity"].'%</span></span></h4><br>';
-        }   
+        }
             echo '</div>';
             ?>
-    
-     
+
+
           </div>
-        
+
         <div class="row">
-            <?php 
+            <?php
         foreach ($climatechange as $entry) {
                         $border = "";
-                if($entry["target"] < $entry["temp"] || $entry["target"] > $entry["temp"]){ 
+                if($entry["target"] < $entry["temp"] || $entry["target"] > $entry["temp"]){
                $border = "border-color:#0984e3;";
                 }else{
                  $border = "";
@@ -59,10 +58,10 @@ include "header.php";
             }else if($entry["target"] == $entry["temp"]){
                 $stat = "off";
             }
-               
+
                 echo '<div class="col-lg-6"><li class="list-group-item d-flex justify-content-between align-items-center" style="  background-color:#000; border-color:#2d3436; '.$border.'">';
 
-            
+
             echo ' <h4 class=""  style="font-family: \'Abel\', sans-serif; color:#dfe6e9;">Thermostat:<span style="color:#0984e3;">'.$stat.'</span></h4><br>';
               echo '<div style="padding-top:10px;">
   <ul class="pagination pagination-md" style="background-color:#000; border-color:#2d3436;">
@@ -77,22 +76,22 @@ include "header.php";
     </li>
   </ul>
 </div>';
-            
-              
-            
-              
-        }   
+
+
+
+
+        }
             echo '</li></div>';
             ?>
-    
-     
+
+
           </div>
         </div>
-        
-   
- 
 
-    
+
+
+
+
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>

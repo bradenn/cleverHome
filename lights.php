@@ -5,17 +5,35 @@ include "mongo.php";
 
 $lights = $client->cleverHome->lights;
 
-$lightsquery = $lights->find( [ 'type' => 'device' ] );
-
+if(!isset($_GET["locationId"])){
+$lightsquery = $lights->find( [ 'type' => "device" ] );
+}else{
+$lightsquery = $lights->find( [ 'locationId' => $_GET["locationId"] ] );
+}
 ?>
 
 <html>
   <script src="vendor/jquery/jquery.js"></script>
 <script type="text/javascript">
+function $_GET(param) {
+	var vars = {};
+	window.location.href.replace( location.hash, '' ).replace(
+		/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+		function( m, key, value ) { // callback
+			vars[key] = value !== undefined ? value : '';
+		}
+	);
 
+	if ( param ) {
+		return vars[param] ? vars[param] : null;
+	}
+	return vars;
+console.log(vars);
+
+}
 
 function updateUI(){
-  $.get( "check.php", function( data ) {
+  $.get( "status.php", <?php if(isset($_GET["locationId"])){ echo '{locationId: '.$_GET["locationId"].'},'; } ?> function( data ) {
   var array = JSON.parse(data);
   for (var i = 0, len = array.length; i < len; i++) {
     var nested = array[i];
@@ -28,26 +46,14 @@ function updateUI(){
       document.getElementById(nested["_id"]["$oid"]).setAttribute('onclick','updateLights("on", "'+nested["lanAddress"]+'")');
     }
   }
-  });
+});
 }
+
 function init(){
 updateUI();
 }
 window.setInterval(function() {
-  $.get( "status.php", function( data ) {
-  var array = JSON.parse(data);
-  for (var i = 0, len = array.length; i < len; i++) {
-    var nested = array[i];
-    console.log("Device: "+nested["_id"]["$oid"]+" Status: "+nested["status"])
-    if(nested["status"] == 1){
-      document.getElementById(nested["_id"]["$oid"]).checked = true;
-      document.getElementById(nested["_id"]["$oid"]).setAttribute('onclick','updateLights("off", "'+nested["lanAddress"]+'")');
-    }else if (nested["status"] == 0) {
-      document.getElementById(nested["_id"]["$oid"]).checked = false;
-      document.getElementById(nested["_id"]["$oid"]).setAttribute('onclick','updateLights("on", "'+nested["lanAddress"]+'")');
-    }
-  }
-  });
+updateUI();
 }, 5000);
 
 function updateLights(toggle, device){
@@ -63,7 +69,7 @@ function updateLights(toggle, device){
 
 <br>
 <div class="ch-content">
-<h1>CLEVERHOME <span class="ch-text-secondary">HUB</span></h1>
+<h1><a href="index.php" class="ch-header-link">CLEVERHOME <span class="ch-text-secondary">HUB</span></a></h1>
 <br>
 <?php
 foreach ($lightsquery as $entry) {

@@ -4,8 +4,11 @@ require("mongo.php");
 
 $collection = $client->cleverHome->lights;
 
-$result = $collection->find( [ 'type' => 'device' ] );
-
+if(isset($_GET["locationId"])){
+$result = $collection->find( [ 'locationId' => $_GET["locationId"] ] );
+}else{
+  $result = $collection->find( [ 'type' => "device" ] );
+}
 $arr = array();
 
 foreach ($result as $entry) {

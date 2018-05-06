@@ -1,91 +1,52 @@
 <?php
-require "mongo.php";
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+include "mongo.php";
+
+$locations = $client->cleverHome->locations;
 $lights = $client->cleverHome->lights;
-$personal = $client->cleverHome->personal;
-$system = $client->cleverHome->systeminfo;
+$climate = $client->cleverHome->climate;
 
-$systemquery = $system->find( [ 'data' => 'info' ] );
-$lightsquery = $lights->find( [ 'type' => 'device' ] );
-$housename = $personal->find( [ 'data' => 'house name' ] );
+$locationsquery = $locations->find();
 
-include "header.php";
+
+?>
+<html>
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+<link rel="stylesheet" href="vendor/css/style.css">
+<body>
+
+<br>
+<div class="ch-content">
+<h1><a href="index.php" class="ch-header-link">CLEVERHOME <span class="ch-text-secondary">HUB</span></a></h1>
+<br>
+<?php
+foreach ($locationsquery as $entry) {
+  echo '<div class="ch-menu-container">';
+  echo '<h2>'.$entry["location"].'</h2>';
+  $lightsquery = $lights->find([ 'locationId' => $entry["locationId"] ]);
+  if(sizeof($lightsquery) > 0){
+  echo '<a href="lights.php?locationId='.$entry["locationId"].'" class="ch-menu-link"><div class="ch-menu-group">
+<h2>Lights</h2>
+</div>
+</a>';
+}
+$climatequery = $climate->find([ 'locationId' => $entry["locationId"] ]);
+
+foreach ($climatequery as $centry) {
+echo '<a href="?locationId='.$centry["locationId"].'" class="ch-menu-link"><div class="ch-menu-group">
+<h2>Climate</h2>
+</div>
+</a>';
+}
+
+
+echo '</div><br>';
+
+}
 ?>
 
-
-
-  <body>
-
-    <!-- Navigation -->
-
-    <!-- Page Content -->
-    <div class="container">
-        <div class="row">
-
-        <div class="col-lg-7">
-            <h1 style="font-family: 'Abel', sans-serif; color:#dfe6e9;">Cleverhome:<span style="color:#0984e3;">menu</span></h1>
-            </div><div class="col-lg-3"></div></div><br>
-        <div class="row">
-
-       <div class="col-lg-6">
-          <a href="lights.php" style="text-decoration: none; " > <li class="list-group-item d-flex justify-content-between align-items-center" style=" background-color:#000; border-color:#2d3436;">
-
-             <h4 class=""  style="font-family: 'Abel', sans-serif; color:#dfe6e9;">Lights</h4><br>
-        </li></a>
-            </div>
-        </div>
-         <br>
-          <div class="row">
-
-       <div class="col-lg-6">
-          <a href="climate.php" style="text-decoration: none;"> <li class="list-group-item d-flex justify-content-between align-items-center" style=" background-color:#000; border-color:#2d3436;">
-
-             <h4 class=""  style="font-family: 'Abel', sans-serif; color:#dfe6e9;">Climate</h4><br>
-        </li></a>
-            </div>
-        </div>
-        <br>
-
-          <div class="row">
-
-       <div class="col-lg-6">
-          <a href="ring.php" style="text-decoration: none;"> <li class="list-group-item d-flex justify-content-between align-items-center" style=" background-color:#000; border-color:#2d3436;">
-
-             <h4 class=""  style="font-family: 'Abel', sans-serif; color:#dfe6e9;">Ring</h4><br>
-        </li></a>
-            </div>
-        </div><br>
-          <div class="row">
-
-       <div class="col-lg-6">
-          <a href="security.php" style="text-decoration: none;"> <li class="list-group-item d-flex justify-content-between align-items-center" style=" background-color:#000; border-color:#2d3436;">
-
-             <h4 class=""  style="font-family: 'Abel', sans-serif; color:#dfe6e9;">Security</h4><br>
-        </li></a>
-            </div>
-        </div><br>
-         <div class="row">
-
-       <div class="col-lg-6">
-          <a href="server.php" style="text-decoration: none;"> <li class="list-group-item d-flex justify-content-between align-items-center" style=" background-color:#000; border-color:#2d3436;">
-
-             <h4 class=""  style="font-family: 'Abel', sans-serif; color:#dfe6e9;">Server Status</h4><br>
-        </li></a>
-            </div>
-        </div>
-
-
-
-
-
-
-
-        </div>
-
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  </body>
+</div>
+</body>
 
 </html>
