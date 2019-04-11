@@ -1,4 +1,5 @@
 # cleverHome
+##### This project has been superseded by Void
 ###### OpenSource and OpenMinded
 
 This cluster of jumbled code is not anything to be aroused by... This is just a fun project I'm working on for home automation.
