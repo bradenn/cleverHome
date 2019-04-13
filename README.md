@@ -13,7 +13,7 @@ This cluster of jumbled code is not anything to be aroused by... This is just a 
 - And some stuff I cant remember probably.
 
 ### Requirements for use:
-- Mind ready capabilities (to figure out how to use the code)
+- Mind reading capabilities (to figure out how to use the code)
 - Webserver
 - Mongodb
 - PHP/Python / the works
